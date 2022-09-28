@@ -1,3 +1,5 @@
+from copy import deepcopy
+
 grid = '''
 {}│{}│{}
 ──┼──┼──
@@ -6,7 +8,10 @@ grid = '''
 {}│{}│{}
 '''
 
-mark = [['  ']*3 for i in range(3)]
+EMPTY = '  '
+SPACE = ' '
+
+mark = [[EMPTY]*3 for i in range(3)]
 
 def draw(mark):
     print(grid.format(mark[0][0], mark[0][1], mark[0][2],
@@ -26,7 +31,7 @@ def move(x, y, dx, dy):
 def rehome():
     for y in range(3):
         for x in range(3):
-            if mark[y][x] == '  ':
+            if mark[y][x] == EMPTY:
                 return x,y
     raise SystemError('Game Over')
 
@@ -44,19 +49,19 @@ def place(x, y):
 x,y = 0,0
 def process(key):
     global x, y
-    diff = {
+    dmap = {
         'a': (-1, 0),
         's': (0, 1),
         'd': (1, 0),
         'w': (0, -1),
     }
-    if (key == ' '):
+    if (key == SPACE):
         place(x, y)
-        x,y = rehome();
-    tmp = [mark[y].copy() for y in range(3)]
-    if (key in diff.keys()):
+        x,y = rehome()
+    tmp = deepcopy(mark)
+    if (key in dmap.keys()):
         backup = x,y
-        dx, dy = diff[key]
+        dx, dy = dmap[key]
         x,y = move(x, y, dx, dy)
         if out(x,y):
             x,y = backup
