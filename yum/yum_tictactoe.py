@@ -21,11 +21,10 @@ def main():
         draw()
     ending()
 
-
-def find_empty(board: str) -> tuple[int, ...]:
+def find_empty(board: str):
     return tuple(x for x, cell in enumerate(board) if cell == '_')
 
-def is_end(board: str) -> bool:
+def is_end(board: str):
     return is_win(board, AI_MARK) or is_win(board, HUMAN_MARK)
 
 def is_win(board, player):
@@ -41,29 +40,30 @@ def minimax(board: str, depth: int, max_player: bool) -> tuple:
         return -1, evaluate(board)
     if max_player == AI:
         value = float('-inf')
-        for each in find_empty(board):
-            _, score = minimax(board[:each] + AI_MARK + board[each + 1:], depth - 1, HUMAN)
+        for pivot in find_empty(board):
+            _, score = minimax(board[:pivot] + AI_MARK + board[pivot + 1:], depth - 1, HUMAN)
             if score > value:
                 value = score
-                position = each
+                position = pivot
             if score == 1:
                 break
     else:
         value = float('inf')
-        for each in find_empty(board):
-            _, score = minimax(board[:each] + AI_MARK + board[each + 1:], depth - 1, AI)
+        for pivot in find_empty(board):
+            _, score = minimax(board[:pivot] + AI_MARK + board[pivot + 1:], depth - 1, AI)
             if score < value:
                 value = score
-                postion = each
+                postion = pivot
             if score == -1:
                 break
+    print(position, value)
     return position, value
 
 def evaluate(board: str) -> int:
-    if is_win(board, AI_MARK):
-        score = 1
-    elif is_win(board, HUMAN_MARK):
+    if is_win(board, HUMAN_MARK):
         socre = -1
+    elif is_win(board, AI_MARK):
+        score = 1
     else:
         score = 0
     return score

@@ -91,7 +91,7 @@ while not open_queue.empty():
         break
     moves = current.moves+1
     for state in current.expand(moves):
-        if state not in closed_queue and state not in open_queue.queue:
+        if state not in closed_queue:
             open_queue.put(state)
     closed_queue.append(current)
 else:

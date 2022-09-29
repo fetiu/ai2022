@@ -78,14 +78,17 @@ def solve(puzzle, goal):
             route = curr_route
             return route
         g = len(curr_route)
+        print(curr_route)
 
         if check[curr_state] != g:
+            print("break!")
             continue
 
         for state in next_states(curr_state, get_adjacent(curr_state)):
             state_g = g + 1
             if state in check:
                 if state_g < check[state]:
+                    print("state_g is smaller!")
                     check[state] = state_g
                     to_add_state = copy.deepcopy(curr_route)
                     to_add_state.append([state, h_score(state, goal)])
@@ -102,10 +105,8 @@ def solve(puzzle, goal):
 
 pass
 
-
 puzz1 = "123405678"
 puzz2 = "152703468"
-
 
 result = solve(puzz1, "123456780")
 print_steps(result)

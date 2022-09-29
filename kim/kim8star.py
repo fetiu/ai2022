@@ -61,13 +61,13 @@ class AStarSolver:
         return
 
     def h(self, state):
-        return self.target.state.count_diff(state.tiles)
-        # displacment = 0
-        # for num in range(1, 9):
-        #     i, j = self.target.state.locate(tile(num))
-        #     x, y = state.locate(tile(num))
-        #     displacment += abs(i-x) + abs(j-y)
-        # return displacment
+        # return self.target.state.count_diff(state.tiles)
+        displacment = 0
+        for num in range(1, 9):
+            i, j = self.target.state.locate(tile(num))
+            x, y = state.locate(tile(num))
+            displacment += abs(i-x) + abs(j-y)
+        return displacment
 
     def g(self, state):
         return state.moves
@@ -95,11 +95,11 @@ class AStarSolver:
             queue.sort(key=lambda x: x.cost)
             # print([state.tiles for state in queue])
 
-target = EightPuzzle("123456780")
+target = EightPuzzle("123804765")
 solver = AStarSolver(target)
 
 # puzzle = EightPuzzle(input("type 9 numbers (0-8): "))
-puzzle = EightPuzzle("152703468")
-# puzzle = EightPuzzle("123046758")
+# puzzle = EightPuzzle("123405678")
+puzzle = EightPuzzle("123046758")
 solver.solve(puzzle)
 
