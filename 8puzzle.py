@@ -1,4 +1,11 @@
 import queue
+
+def find_index(puzzle, num):
+    index = str(puzzle).find(str(num))
+    i = index//3
+    j = index - i*3
+    return i, j
+
 # 상태를 나타내는 클래스, f(n) 값을 저장한다.
 class State:
     def __init__(self, board, goal, moves=0):
@@ -29,7 +36,13 @@ class State:
   # 휴리스틱 함수 값인 h(n)을 계산하여 반환한다.
   # 현재 제 위치에 있지 않은 타일의 개수를 리스트 함축으로 계산한다.
     def h(self):
-        return sum([1 if self.board[i] != self.goal[i] else 0 for i in range(8)])
+        displacment = 0
+        for num in range(1, 9):
+            i, j = find_index(self.board, num)
+            x, y = find_index(self.goal, num)
+            displacment += abs(i-x) + abs(j-y)
+        return displacment
+        # return sum([1 if self.board[i] != self.goal[i] else 0 for i in range(8)])
   # 시작 노드로부터의 경로를 반환한다.
     def g(self):
         return self.moves
@@ -50,9 +63,10 @@ class State:
         str(self.board[6:]) +"\n"+\
         "------------------"
 # 초기 상태
-puzzle = [1, 2, 3,
-          0, 4, 6,
-          7, 5, 8]
+
+puzzle = [1, 5, 2,
+          7, 0, 3,
+          4, 6, 8]
 # 목표 상태
 goal = [1, 2, 3,
         4, 5, 6,
