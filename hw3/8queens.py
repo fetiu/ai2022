@@ -13,7 +13,7 @@ class Chromosome:
     def __init__(self, g=[]):
         self.genes = g.copy()		# 유전자는 리스트로 구현된다.
         self.fitness = 0		# 적합도
-        if self.genes.__len__()==0:	# 염색체가 초기 상태이면 초기화한다.
+        if len(self.genes)==0:	# 염색체가 초기 상태이면 초기화한다.
             i = 0
             while i<SIZE:
                 self.genes.append(gen_queen())
@@ -43,13 +43,16 @@ def print_p(pop):
 
 # 선택 연산
 def select(pop):
-    max_value  = sum([c.cal_fitness() for c in pop])
+    # Chromosome을 키 삼아 조회하는 룰렛 딕셔너리를 생성
+    # 선택 확률을 최대화 하기 위해 적합도에 100 제곱을 취함
+    roulette = {c:c.cal_fitness()**100 for c in pop}
+    max_value  = sum(roulette.values())
     pick    = random.uniform(0, max_value)
     current = 0
 
     # 룰렛휠에서 어떤 조각에 속하는지를 알아내는 루프
     for c in pop:
-        current += c.cal_fitness()
+        current += roulette[c]
         if current > pick:
             return c
 
@@ -57,7 +60,7 @@ def select(pop):
 def crossover(pop):
     father = select(pop)
     mother = select(pop)
-    index = random.randint(1, SIZE - 2)
+    index = random.randint(1, SIZE-2)
     child1 = father.genes[:index] + mother.genes[index:]
     child2 = mother.genes[:index] + father.genes[index:]
     return (child1, child2)
@@ -104,4 +107,4 @@ while population[0].cal_fitness() < 28:
     print("세대 번호=", count)
     print_p(population)
     count += 1
-    if count > 1000 : break;
+    if count > 2000 : break;
