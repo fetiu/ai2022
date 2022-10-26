@@ -45,8 +45,12 @@ def print_p(pop):
 def select(pop):
     # Chromosome을 키 삼아 조회하는 룰렛 딕셔너리를 생성
     # 선택 확률을 최대화 하기 위해 적합도에 100 제곱을 취함
-    roulette = {c:c.cal_fitness()**100 for c in pop}
-    max_value  = sum(roulette.values())
+    roulette = {}
+    max_value = 0
+    for c in pop:
+        roulette[c] = c.cal_fitness()**100
+        max_value += roulette[c];
+
     pick    = random.uniform(0, max_value)
     current = 0
 
