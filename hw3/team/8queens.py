@@ -1,4 +1,5 @@
 import random
+import matplotlib.pyplot as plt
 
 POPULATION_SIZE = 5		# 개체 집단의 크기
 MUTATION_RATE = 0.1			# 돌연 변이 확률
@@ -77,6 +78,7 @@ population.sort(key=lambda x: x.cal_fitness(), reverse=True)
 print("세대 번호=", count)
 print_p(population)
 count=1
+data = []
 
 while population[0].cal_fitness() < 28:
     new_pop = []
@@ -104,4 +106,8 @@ while population[0].cal_fitness() < 28:
     print("세대 번호=", count)
     print_p(population)
     count += 1
+    data.append(population[0].cal_fitness())
     if count > 2000 : break;
+
+plt.plot(data)
+plt.show()
