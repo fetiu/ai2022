@@ -1,9 +1,9 @@
 import random
-from turtle import distance
 
 POPULATION_SIZE = 5		# 개체 집단의 크기
 MUTATION_RATE = 0.1			# 돌연 변이 확률
 SIZE = 8				# 하나의 염색체에서 유전자 개수
+MIN_DISTANCE = 1063
 
 map = {
     'su': {'ic': 30, 'dj': 140, 'cc': 75, 'gr': 168,
@@ -37,13 +37,13 @@ class Chromosome:
 
     def cal_fitness(self):		# 적합도를 계산한다.
         self.fitness = 0;
-        distance = 0;
+        d = 0;
         now  = 'su'
         for next in self.genes:
-            distance += map[now][next]
+            d += map[now][next]
             now = next
-        distance += map[now]['su']
-        self.fitness = 1/distance
+        d += map[now]['su']
+        self.fitness = MIN_DISTANCE/d
         return self.fitness
 
     def __str__(self):
@@ -95,7 +95,7 @@ print("세대 번호=", count)
 print_p(population)
 count=1
 
-while population[0].cal_fitness() < 1063:
+while population[0].cal_fitness() < 99:
     new_pop = []
 
     # 선택과 교차 연산

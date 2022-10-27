@@ -87,12 +87,17 @@ while population[0].cal_fitness() < 28:
         new_pop.append(Chromosome(c1));
         new_pop.append(Chromosome(c2));
 
+    # 돌연변이 연산
+    for c in new_pop: mutate(c)
+
+    # 엘리트 주의
+    population.sort(key=lambda x: x.cal_fitness(), reverse=True)
+    new_pop.append(population[0])
+
     # 자식 세대가 부모 세대를 대체한다.
     # 깊은 복사를 수행한다.
     population = new_pop.copy();
 
-    # 돌연변이 연산
-    for c in population: mutate(c)
 
     # 출력을 위한 정렬
     population.sort(key=lambda x: x.cal_fitness(), reverse=True)
