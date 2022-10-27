@@ -1,9 +1,9 @@
 import random
 
+MIN_DISTANCE = 1018
 POPULATION_SIZE = 5		# 개체 집단의 크기
 MUTATION_RATE = 0.1			# 돌연 변이 확률
 SIZE = 8				# 하나의 염색체에서 유전자 개수
-MIN_DISTANCE = 1063
 
 cities = {
     'su': {'ic': 30, 'dj': 140, 'cc': 75, 'gr': 168,
@@ -32,7 +32,7 @@ class Chromosome:
         self.genes = g.copy()		# 유전자는 리스트로 구현된다.
         self.fitness = 0		# 적합도
         if len(self.genes)==0:	# 염색체가 초기 상태이면 초기화한다.
-            self.genes =['ic', 'dj', 'cc', 'gr', 'dg', 'us', 'ps', 'gj']
+            self.genes = ['ic', 'dj', 'cc', 'gr', 'dg', 'us', 'ps', 'gj']
             random.shuffle(self.genes)
 
     def cal_fitness(self):		# 적합도를 계산한다.
@@ -66,18 +66,16 @@ def select(pop):
     # 중복없이 두개 선택
     return random.sample(roulette, 2);
 
-def splice(slice, at, origin):
+def splice(slice, origin):
     diff = [x for x in origin if x not in slice]
-    # print(slice)
-    # print(diff)
-    return diff[:i] + slice + diff[i:]
+    return diff + slice
 
 # 교차 연산
 def crossover(pop):
     mother, father = select(pop)
     i = random.randint(1, SIZE-4)
-    child1 = splice(father.genes[i:i+4], i, mother.genes)
-    child2 = splice(mother.genes[i:i+4], i, father.genes)
+    child1 = splice(father.genes[i:i+4], mother.genes)
+    child2 = splice(mother.genes[i:i+4], father.genes)
     return (child1, child2)
 
 # 돌연변이 연산
@@ -122,4 +120,6 @@ while population[0].cal_fitness() < 100:
     print("세대 번호=", count)
     print_p(population)
     count += 1
-    if count > 2000 : break;
+    if count > 5000 : break;
+
+print(f'shortest path: sum({population[0]}) = {int(MIN_DISTANCE/population[0].cal_fitness()*100)}')
