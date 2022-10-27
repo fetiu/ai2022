@@ -1,5 +1,4 @@
 import random
-import time
 
 POPULATION_SIZE = 5		# 개체 집단의 크기
 MUTATION_RATE = 0.1			# 돌연 변이 확률
@@ -43,27 +42,16 @@ def print_p(pop):
 
 # 선택 연산
 def select(pop):
-    # Chromosome을 키 삼아 조회하는 룰렛 딕셔너리를 생성
-    # 선택 확률을 최대화 하기 위해 적합도에 100 제곱을 취함
-    roulette = {}
-    max_value = 0
-    for c in pop:
-        roulette[c] = c.cal_fitness()**100
-        max_value += roulette[c];
+    # 오름차순 정렬로 좋은 유전자가 큰 인덱스 값을 갖게 한 뒤, 그 값에 비례하여 룰렛에 더 많이 삽입
+    pop.sort(key=lambda x: x.cal_fitness())
+    roulette = [c for i, c in enumerate(pop) for _ in range((i+1)**i)] # NOTE: (0+1)^0 = 1
 
-    pick    = random.uniform(0, max_value)
-    current = 0
-
-    # 룰렛휠에서 어떤 조각에 속하는지를 알아내는 루프
-    for c in pop:
-        current += roulette[c]
-        if current > pick:
-            return c
+    # 중복없이 두개 선택
+    return random.sample(roulette, 2);
 
 # 교차 연산
 def crossover(pop):
-    father = select(pop)
-    mother = select(pop)
+    mother, father = select(pop)
     index = random.randint(1, SIZE-2)
     child1 = father.genes[:index] + mother.genes[index:]
     child2 = mother.genes[:index] + father.genes[index:]
