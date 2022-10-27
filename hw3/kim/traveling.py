@@ -37,13 +37,13 @@ class Chromosome:
 
     def cal_fitness(self):		# 적합도를 계산한다.
         self.fitness = 0;
-        d = 0;
+        distance = 0;
         now  = 'su'
         for next in self.genes:
-            d += map[now][next]
+            distance += map[now][next]
             now = next
-        d += map[now]['su']
-        self.fitness = MIN_DISTANCE/d
+        distance += map[now]['su']
+        self.fitness = (MIN_DISTANCE/distance)*100
         return self.fitness
 
     def __str__(self):
@@ -66,12 +66,18 @@ def select(pop):
     # 중복없이 두개 선택
     return random.sample(roulette, 2);
 
+def splice(slice, at, origin):
+    diff = [x for x in origin if x not in slice]
+    # print(slice)
+    # print(diff)
+    return diff[:i] + slice + diff[i:]
+
 # 교차 연산
 def crossover(pop):
     mother, father = select(pop)
-    index = random.randint(1, SIZE-2)
-    child1 = father.genes[:index] + mother.genes[index:]
-    child2 = mother.genes[:index] + father.genes[index:]
+    i = random.randint(1, SIZE-4)
+    child1 = splice(father.genes[i:i+4], i, mother.genes)
+    child2 = splice(mother.genes[i:i+4], i, father.genes)
     return (child1, child2)
 
 # 돌연변이 연산
@@ -95,7 +101,7 @@ print("세대 번호=", count)
 print_p(population)
 count=1
 
-while population[0].cal_fitness() < 99:
+while population[0].cal_fitness() < 100:
     new_pop = []
 
     # 선택과 교차 연산
