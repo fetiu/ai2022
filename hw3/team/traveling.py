@@ -60,8 +60,12 @@ def print_p(pop):
 
 # 선택 연산
 def select(pop):
+    # 오름차순 정렬로 좋은 유전자가 큰 인덱스 값을 갖게 한 뒤, 그 값에 비례하여 룰렛에 더 많이 삽입
+    pop.sort(key=lambda x: x.cal_fitness())
+    roulette = [c for i, c in enumerate(pop) for _ in range(i)]
+
     # 중복없이 두개 선택
-    return random.sample(pop, 2);
+    return random.sample(roulette, 2);
 
 def splice(slice, origin):
     diff = [x for x in origin if x not in slice]
@@ -106,8 +110,10 @@ while population[0].cal_fitness() < 100:
         new_pop.append(Chromosome(c1));
         new_pop.append(Chromosome(c2));
 
+    # 돌연변이 연산
     for c in new_pop: mutate(c)
 
+    # 엘리트 주의
     population.sort(key=lambda x: x.cal_fitness(), reverse=True)
     new_pop.append(population[0])
 
@@ -115,15 +121,13 @@ while population[0].cal_fitness() < 100:
     # 깊은 복사를 수행한다.
     population = new_pop.copy();
 
-    # 돌연변이 연산
-
     # 출력을 위한 정렬
     population.sort(key=lambda x: x.cal_fitness(), reverse=True)
     print("세대 번호=", count)
     print_p(population)
     count += 1
     data.append(population[0].cal_fitness())
-    if count > 1000 : break;
+    if count > 3000 : break;
 
 print(f'shortest path: sum({population[0]}) = {int(MIN_DISTANCE/population[0].cal_fitness()*100)}')
 plt.plot(data)
