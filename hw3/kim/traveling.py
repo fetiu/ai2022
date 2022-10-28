@@ -5,7 +5,7 @@ MUTATION_RATE = 0.1			# 돌연 변이 확률
 SIZE = 8				# 하나의 염색체에서 유전자 개수
 MIN_DISTANCE = 1063
 
-map = {
+cities = {
     'su': {'ic': 30, 'dj': 140, 'cc': 75, 'gr': 168,
            'dg': 237, 'us': 303, 'ps': 325, 'gj': 268},
     'ic': {'su': 30, 'dj': 140, 'cc': 105, 'gr': 198,
@@ -40,9 +40,9 @@ class Chromosome:
         distance = 0;
         now  = 'su'
         for next in self.genes:
-            distance += map[now][next]
+            distance += cities[now][next]
             now = next
-        distance += map[now]['su']
+        distance += cities[now]['su']
         self.fitness = (MIN_DISTANCE/distance)*100
         return self.fitness
 
