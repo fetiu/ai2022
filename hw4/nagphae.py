@@ -50,17 +50,15 @@ with open('seoul-toilets2.csv', 'r') as f:
     data = DictReader(f);
     update_nearest(data);
 
+nearwords = ['근처', '근방', '가까운']
 quitwords =  ['없어', '괜찮아', '종료', '그만', '끝']
-mapwords = ['지도', '길', '위치', '약도', '그림', '맵']
+mapwords = ['지도', '길', '위치', '약도', '그림', '맵', '주소']
 for word in loc['msg'].split():
     if word in quitwords:
         print('끝')
-        quit();
+    if word in nearwords:
+        print(f"{nearest['name']}이 가장 가까운 화장실이에요. ")
     if word in mapwords:
-        quit();
+        print(loc2addr(nearest['lat'], nearest['lon']), '에요.')
 
-if nearest['name'] is None:
-    print(f'가까운 화장실을 찾지 못했어요 ');
-else:
-    print(f"{nearest['name']}이 가장 가까운 화장실이에요. 주소는")
-    print(loc2addr(nearest['lat'], nearest['lon']), '에요.')
+quit()
