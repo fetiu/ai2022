@@ -59,6 +59,6 @@ for word in loc['msg'].split():
     if word in nearwords:
         print(f"{nearest['name']}이 가장 가까운 화장실이에요. ")
     if word in mapwords:
-        print(loc2addr(nearest['lat'], nearest['lon']), '에요.')
+        print(loc2addr(nearest['lat'], nearest['lon']))
 
-quit()
+# TODO: print location data as coordinate

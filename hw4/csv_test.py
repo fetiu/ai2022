@@ -1,5 +1,7 @@
 from csv import DictReader
 
+
+
 with open('metro-toilets.csv', 'r', encoding='cp949') as f:
     data = DictReader(f);
     for row in data:
